@@ -20,7 +20,7 @@ defmodule BugWeb.UserLive.FormComponent do
         phx-submit="save"
       >
         <.input field={@form[:name]} type="text" label="Name" />
-        <.input field={@form[:country]} type="text" label="Country" />
+        <.input field={@form[:country]} type="select" label="Country" prompt="Select a country" options={@countries}/>
         <:actions>
           <.button phx-disable-with="Saving...">Save User</.button>
         </:actions>
@@ -31,11 +31,13 @@ defmodule BugWeb.UserLive.FormComponent do
 
   @impl true
   def update(%{user: user} = assigns, socket) do
+    countries = Accounts.User.countries()
     changeset = Accounts.change_user(user)
 
     {:ok,
      socket
      |> assign(assigns)
+     |> assign(countries: countries)
      |> assign_form(changeset)}
   end
 
